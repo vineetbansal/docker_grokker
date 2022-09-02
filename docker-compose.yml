@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  echo_server:
+    image: ${IMAGE_NAME}:0.0.0  # Got from an .env file
+    build:
+      context: .
+      dockerfile: ${DOCKERFILE}  # Got from an .env file and consumed here; not strictly needed
+      args:
+        IMAGE_NAME: ${IMAGE_NAME}  # Got from an .env file and passed on to Dockerfile
+
+    # The following is doable but a BAD DESIGN
+    # These are passed on to the running container, overridding any ENV in Dockerfile
+    # Only applies on 'docker-compose up', not applicable when we do 'docker run'
+    # environment:
+    #   - GREETING=Namaste_from_docker_compose
+    #   - GREETING  # Get from host environment
+
+    # Preferred way to pass variables to running container
+    env_file: 
+      - echo.env
